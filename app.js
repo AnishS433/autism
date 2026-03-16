@@ -7,7 +7,7 @@
 // For production: 'https://your-app-name.onrender.com'
 const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
     ? 'http://127.0.0.1:5001'
-    : 'https://YOUR-RENDER-APP.onrender.com';  // <-- UPDATE THIS after Render deploy
+    : 'https://autism-vt04.onrender.com';  // <-- UPDATE THIS after Render deploy
 // =========================================================
 
 document.addEventListener('DOMContentLoaded', function () {
