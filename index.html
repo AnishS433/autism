@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autism Prediction - Autism Prediction</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🧠</span>
+                <span class="logo-text">Autism Prediction</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#quiz">Take Quiz</a></li>
+                <li><a href="#video-analysis">Video Analysis</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Autism Spectrum Prediction</h1>
+                <p>Advanced screening tool powered by machine learning to help identify autism spectrum patterns</p>
+                <a href="#quiz" class="btn btn-primary">Start Assessment</a>
+            </div>
+            <div class="hero-image">
+                <div class="brain-animation">
+                    <div class="brain-pulse"></div>
+                    <div class="brain-pulse delay-1"></div>
+                    <div class="brain-pulse delay-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Autism Prediction</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Data-Driven</h3>
+                    <p>Powered by advanced machine learning algorithms trained on comprehensive datasets</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">🔒</div>
+                    <h3>Privacy First</h3>
+                    <p>Your data is encrypted and never shared with third parties</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Instant Results</h3>
+                    <p>Get your assessment results within seconds</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">👨‍⚕️</div>
+                    <h3>Professional</h3>
+                    <p>Designed to assist healthcare professionals in screening</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="quiz" class="quiz-section">
+        <div class="container">
+            <h2>Autism Screening Questionnaire</h2>
+            <p class="quiz-intro">Please answer the following 10 questions based on your observations</p>
+
+            <form id="autism-form" class="quiz-form">
+                <div class="form-section">
+                    <h3>Demographics</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="age" min="1" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="m">Male</option>
+                                <option value="f">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ethnicity">Ethnicity</label>
+                            <select id="ethnicity" name="ethnicity" required>
+                                <option value="">Select ethnicity</option>
+                                <option value="White-European">White-European</option>
+                                <option value="Asian">Asian</option>
+                                <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="South Asian">South Asian</option>
+                                <option value="Black">Black</option>
+                                <option value="Latino">Latino</option>
+                                <option value="Pasifika">Pasifika</option>
+                                <option value="Turkish">Turkish</option>
+                                <option value="Hispanic">Hispanic</option>
+                                <option value="Others">Others</option>
+                                <option value="?">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country of Residence</label>
+                            <select id="country" name="country" required>
+                                <option value="">Select country</option>
+                                <option value="United States">United States</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="India">India</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Canada">Canada</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Jordan">Jordan</option>
+                                <option value="Egypt">Egypt</option>
+                                <option value="Germany">Germany</option>
+                                <option value="France">France</option>
+                                <option value="Italy">Italy</option>
+                                <option value="Spain">Spain</option>
+                                <option value="Russia">Russia</option>
+                                <option value="Iran">Iran</option>
+                                <option value="Afghanistan">Afghanistan</option>
+                                <option value="Pakistan">Pakistan</option>
+                                <option value="Sri Lanka">Sri Lanka</option>
+                                <option value="Malaysia">Malaysia</option>
+                                <option value="Philippines">Philippines</option>
+                                <option value="Ireland">Ireland</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="Austria">Austria</option>
+                                <option value="United Arab Emirates">United Arab Emirates</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="jaundice">History of Jaundice</label>
+                            <select id="jaundice" name="jaundice" required>
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="austim">Family History of Autism</label>
+                            <select id="austim" name="austim" required>
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="relation">Your Relation</label>
+                            <select id="relation" name="relation" required>
+                                <option value="">Select relation</option>
+                                <option value="Self">Self</option>
+                                <option value="Parent">Parent</option>
+                                <option value="Relative">Relative</option>
+                                <option value="Health care professional">Health Care Professional</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="used_app">Used App Before</label>
+                            <select id="used_app" name="used_app" required>
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Screening Questions (AQ-10)</h3>
+                    <p class="section-desc">Answer each question as "Yes" or "No" based on the behavior described</p>
+
+                    <div class="question-grid">
+                        <div class="question-card">
+                            <label class="question-label">1. I often notice small sounds when others do not</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A1_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A1_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">2. I usually concentrate more on the whole picture than on
+                                small details</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A2_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A2_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">3. I find it easy to do more than one thing at once</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A3_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A3_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">4. If there is an interruption, I can switch back very
+                                quickly</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A4_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A4_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">5. I find it easy to 'read between the lines' when someone is
+                                talking to me</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A5_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A5_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">6. I know how to tell if someone listening to me is getting
+                                bored</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A6_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A6_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">7. When I'm reading a story I find it difficult to work out
+                                the characters' intentions</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A7_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A7_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">8. I like to collect information about categories of
+                                things</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A8_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A8_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">9. I find it easy to work out what someone is thinking or
+                                feeling just by looking at their face</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A9_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A9_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <label class="question-label">10. I find it difficult to work out people's
+                                intentions</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="A10_Score" value="1" required>
+                                    <span class="radio-text">Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="A10_Score" value="0">
+                                    <span class="radio-text">No</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-submit">
+                    <span class="btn-text">Get Prediction</span>
+                    <span class="btn-loader"></span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <section id="video-analysis" class="video-analysis-section">
+        <div class="container">
+            <h2>Video Analysis</h2>
+            <p class="section-intro">Upload a video for behavioral analysis. Our AI will analyze facial expressions, eye
+                contact patterns, and movement behaviors commonly associated with autism spectrum traits.</p>
+
+            <div class="video-upload-container">
+                <div class="upload-methods">
+                    <div class="method-card" id="upload-method">
+                        <div class="method-icon">📁</div>
+                        <h3>Upload Video</h3>
+                        <p>Select a video file from your device</p>
+                        <input type="file" id="video-input" accept="video/*" style="display: none;">
+                        <button class="btn btn-primary" onclick="document.getElementById('video-input').click()">Choose
+                            File</button>
+                        <p class="file-name" id="file-name">No file selected</p>
+                    </div>
+
+                    <div class="method-card" id="record-method">
+                        <div class="method-icon">🎥</div>
+                        <h3>Record Video</h3>
+                        <p>Record a video using your camera</p>
+                        <button class="btn btn-primary" id="start-record-btn">Start Recording</button>
+                        <button class="btn btn-secondary" id="stop-record-btn" style="display: none;">Stop
+                            Recording</button>
+                    </div>
+                </div>
+
+                <div class="video-preview-container" id="video-preview-container" style="display: none;">
+                    <video id="video-preview" controls></video>
+                    <video id="recording-preview" controls style="display: none;"></video>
+
+                    <!-- Manual Text Fallback Option -->
+                    <div class="manual-video-input"
+                        style="margin-top: 1.5rem; margin-bottom: 1.5rem; text-align: left;">
+                        <label for="video-manual-desc"
+                            style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem; color: var(--text-secondary);">
+                            Optional: Describe what is happening in the video (e.g. "child avoids eye contact",
+                            "repetitive hand flapping") to guide the AI if automatic analysis fails.
+                        </label>
+                        <textarea id="video-manual-desc" rows="3" placeholder="Enter behavioral observations..."
+                            style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--dark-bg); color: var(--text-primary); resize: vertical; margin-bottom: 1rem;"></textarea>
+                    </div>
+
+                    <div class="video-controls">
+                        <button class="btn btn-primary" id="analyze-video-btn">Analyze Video</button>
+                        <button class="btn btn-secondary" id="clear-video-btn">Clear</button>
+                    </div>
+                </div>
+
+                <div class="analysis-progress" id="analysis-progress" style="display: none;">
+                    <div class="progress-icon">🔍</div>
+                    <h3>Analyzing Video...</h3>
+                    <p>Our AI is analyzing behavioral patterns in your video</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p class="progress-text" id="progress-text">Processing frames...</p>
+                </div>
+
+                <div class="video-results" id="video-results" style="display: none;">
+                    <h3>Video Analysis Results</h3>
+
+                    <div class="result-header" id="video-result-header">
+                        <div class="result-icon-large" id="video-result-icon">🧠</div>
+                        <div class="result-info">
+                            <div class="result-risk-level" id="video-risk-level">Analyzing...</div>
+                            <div class="result-confidence" id="video-confidence">--</div>
+                        </div>
+                    </div>
+
+                    <div class="result-description-box" id="video-result-description">
+                        <!-- Results description will be inserted here -->
+                    </div>
+
+                    <!-- NEW: What the AI Analyzed Explanation -->
+                    <div class="analysis-explanation" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08)); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
+                        <h4 style="margin-bottom: 1rem; color: #8b5cf6; display: flex; align-items: center; gap: 8px;">
+                            <span>🔬</span> What Did the AI Analyze?
+                        </h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                            The AI performed a multi-stage behavioral analysis on your uploaded video. Here are the <strong>6 behavioral categories</strong> that were evaluated:
+                        </p>
+                        <div class="analysis-categories" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+                            <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; border-left: 3px solid #6366f1;">
+                                <strong style="color: #818cf8;">A — Eye Contact & Facial Interaction</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Gaze direction, face orientation, eye contact avoidance, and facial emotion variation across frames.</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; border-left: 3px solid #8b5cf6;">
+                                <strong style="color: #a78bfa;">B — Social Interaction</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Engagement with nearby people, response to interaction attempts, imitation of actions, and proximity avoidance.</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; border-left: 3px solid #ec4899;">
+                                <strong style="color: #f472b6;">C — Repetitive Behaviors</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Hand flapping, body rocking, spinning, finger flicking, repetitive jumping, and repetitive clapping (motion cycle analysis).</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; border-left: 3px solid #f59e0b;">
+                                <strong style="color: #fbbf24;">D — Motor Pattern Differences</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Toe walking, stiff movement, unusual posture, joint angles, and walking gait analysis.</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; border-left: 3px solid #10b981;">
+                                <strong style="color: #34d399;">E — Attention Patterns</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Long fixation on objects, watching spinning objects, difficulty shifting gaze, and gaze fixation duration.</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; border-left: 3px solid #ef4444;">
+                                <strong style="color: #f87171;">F — Sensory Response Behaviors</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Covering ears, sudden agitation, turning away from stimuli, hand-to-head gestures, and motion bursts.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="markers-detected">
+                        <h4>Behaviors Detected</h4>
+                        <div class="markers-list" id="markers-list">
+                            <!-- Markers will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="analysis-details">
+                        <h4>Feature Vector & Detailed Scores</h4>
+                        <div class="details-list" id="analysis-details">
+                            <!-- Analysis details will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- NEW: Risk Score Formula Explanation -->
+                    <div class="risk-formula-section" style="background: rgba(239, 68, 68, 0.06); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
+                        <h4 style="margin-bottom: 0.8rem; color: #f87171; display: flex; align-items: center; gap: 8px;">
+                            <span>📐</span> How the Risk Score is Calculated
+                        </h4>
+                        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.8rem;">The final Autism Behavior Risk Score is a weighted combination of the category scores:</p>
+                        <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.85rem; color: #f8fafc; line-height: 1.8;">
+                            Risk Score =<br>
+                            &nbsp;&nbsp;0.25 × <span style="color: #818cf8;">Eye Contact Score</span><br>
+                            + 0.30 × <span style="color: #f472b6;">Repetitive Behavior Score</span><br>
+                            + 0.20 × <span style="color: #a78bfa;">Social Interaction Score</span><br>
+                            + 0.15 × <span style="color: #34d399;">Attention Pattern Score</span><br>
+                            + 0.10 × <span style="color: #f87171;">Sensory Response Score</span>
+                        </div>
+                        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.8rem;">
+                            <strong>High Risk:</strong> Score ≥ 0.70 &nbsp;|&nbsp; <strong>Moderate Risk:</strong> Score 0.40–0.69 &nbsp;|&nbsp; <strong>Low Risk:</strong> Score &lt; 0.40
+                        </p>
+                    </div>
+
+                    <div class="result-actions">
+                        <button class="btn btn-secondary" id="new-video-btn">Analyze New Video</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-guidelines">
+                <h3>Video Recording Guidelines</h3>
+                <ul>
+                    <li>📹 Ensure good lighting - face should be clearly visible</li>
+                    <li>👤 Face the camera directly for best eye contact analysis</li>
+                    <li>⏱️ Record for 30 seconds to 2 minutes</li>
+                    <li>🎯 Keep your face centered in the frame</li>
+                    <li>🔇 Record in a quiet environment</li>
+                    <li>🚫 Avoid wearing sunglasses or items that cover your face</li>
+                </ul>
+                <p class="disclaimer-text">Note: Video analysis provides preliminary observations only. For accurate
+                    diagnosis, please consult with a healthcare professional.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="results" class="results-section" style="display: none;">
+        <div class="container">
+            <div class="results-container">
+                <h2>Your Assessment Results</h2>
+                <div class="result-card">
+                    <div class="result-icon" id="result-icon">🧠</div>
+                    <div class="result-status" id="result-status">Analyzing...</div>
+                    <div class="result-score" id="result-score">--</div>
+                    <p class="result-description" id="result-description">Please wait while we analyze your responses...
+                    </p>
+                </div>
+                <div class="result-details" id="result-details">
+                    <h3>Your Responses Summary</h3>
+                    <div id="summary-content"></div>
+                </div>
+                <button class="btn btn-secondary" onclick="resetForm()">Take New Assessment</button>
+            </div>
+        </div>
+
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="disclaimer">This is a screening tool only and does not provide medical diagnosis. Please consult a
+                healthcare professional for proper evaluation.</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot Floating Action Button -->
+    <div class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()">
+        🌈
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container hidden" id="chatbot-container">
+        <div class="chatbot-header" onclick="toggleChat()">
+            <div class="chatbot-title">
+                <span style="font-size: 1.25rem;">🌈</span> AI Assistant
+            </div>
+            <button class="close-chat-btn" id="chatbot-close-btn">&times;</button>
+        </div>
+        <div class="chatbot-body" id="chatbot-body">
+            <div class="chat-message bot-message">
+                Hello! I'm the Autism Prediction AI Assistant. I can help answer questions about autism screening, how
+                our tool works, or explain the assessment results. How can I help you today?
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chat-input" placeholder="Type your question here..."
+                onkeypress="handleChatSubmit(event)">
+            <button class="chat-send-btn" onclick="sendChatMessage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
