@@ -1,6 +1,15 @@
 // Autism Prediction - Autism Prediction Web Application
 // JavaScript for handling form submissions, predictions, and video analysis
 
+// ===================== CONFIGURATION =====================
+// IMPORTANT: Change this URL to your Render backend URL after deployment
+// For local development: 'http://127.0.0.1:5001'
+// For production: 'https://your-app-name.onrender.com'
+const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+    ? 'http://127.0.0.1:5001'
+    : 'https://YOUR-RENDER-APP.onrender.com';  // <-- UPDATE THIS after Render deploy
+// =========================================================
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('autism-form');
     const resultsSection = document.getElementById('results');
@@ -98,7 +107,7 @@ function collectFormData() {
 
 async function makePrediction(data) {
     try {
-        const response = await fetch('http://127.0.0.1:5001/predict', {
+        const response = await fetch(`${API_BASE_URL}/predict`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -434,7 +443,7 @@ async function analyzeVideo() {
         }
 
         // Send to backend for analysis
-        const response = await fetch('http://127.0.0.1:5001/analyze-video', {
+        const response = await fetch(`${API_BASE_URL}/analyze-video`, {
             method: 'POST',
             body: formData
         });
@@ -654,7 +663,7 @@ async function sendChatMessage() {
     chatBody.scrollTop = chatBody.scrollHeight;
 
     try {
-        const response = await fetch('http://127.0.0.1:5001/chat', {
+        const response = await fetch(`${API_BASE_URL}/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: message })
