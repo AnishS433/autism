@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autism Prediction - Autism Prediction</title>
+    <link rel="stylesheet" href="styles.css?v=2">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🧠</span>
+                <span class="logo-text">Autism Prediction</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="video-analysis.html">Video Analysis</a></li>
+                <li><a href="game.html">Mini Game</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="game" class="game-section">
+        <div class="container">
+            <h2>Emotion Recognition Game</h2>
+            <p class="section-intro">This interactive mini-game assesses emotion recognition speed and accuracy, providing additional behavioral insights for screening.</p>
+            
+            <div class="game-selector" id="game-selector">
+                <div class="game-card hub-card" onclick="startSpecificGame('emotion')">
+                    <div class="hub-icon">🎭</div>
+                    <h3>Emotion Recognition</h3>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0;">Identify facial expressions quickly and accurately.</p>
+                </div>
+                <div class="game-card hub-card" onclick="startSpecificGame('visual')">
+                    <div class="hub-icon">🔍</div>
+                    <h3>Visual Pattern Search</h3>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0;">Find the unique target shape hidden among distractors.</p>
+                </div>
+                <div class="game-card hub-card" onclick="startSpecificGame('gonogo')">
+                    <div class="hub-icon">🚦</div>
+                    <h3>Go/No-Go Inhibition</h3>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0;">Test your impulse control and sustained attention.</p>
+                </div>
+            </div>
+
+            <!-- Emotion Recognition Game -->
+            <div class="game-container" id="container-emotion" style="display: none;">
+                <div class="game-card" id="game-intro-emotion">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🎭</div>
+                    <h3 style="font-size: 1.75rem; color: var(--primary-dark); margin-bottom: 1rem;">Emotion Recognition</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">You will be shown a series of 10 faces expressing different emotions. Select the correct emotion from the options as quickly as possible.</p>
+                    <button class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 3rem;" onclick="startEmotionGame()">Start</button>
+                    <button class="btn btn-secondary" style="font-size: 1.2rem; padding: 1rem 3rem; margin-left: 1rem;" onclick="showGameSelector()">Back</button>
+                </div>
+
+                <div class="game-card" id="game-play-emotion" style="display: none;">
+                    <div class="game-header">
+                        <span id="game-round-emotion">Round 1/10</span>
+                        <span id="game-timer-emotion">0.0s</span>
+                    </div>
+                    <div class="emoji-display" id="emoji-display">😀</div>
+                    <div class="options-grid" id="options-grid"></div>
+                </div>
+            </div>
+
+            <!-- Visual Pattern Search Game -->
+            <div class="game-container" id="container-visual" style="display: none;">
+                <div class="game-card" id="game-intro-visual">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+                    <h3 style="font-size: 1.75rem; color: var(--primary-dark); margin-bottom: 1rem;">Visual Pattern Search</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">Find the <strong>Single Odd Shape</strong> hidden among identical distractors as quickly as you can across 5 rounds.</p>
+                    <button class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 3rem;" onclick="startVisualGame()">Start</button>
+                    <button class="btn btn-secondary" style="font-size: 1.2rem; padding: 1rem 3rem; margin-left: 1rem;" onclick="showGameSelector()">Back</button>
+                </div>
+
+                <div class="game-card" id="game-play-visual" style="display: none;">
+                    <div class="game-header">
+                        <span id="game-round-visual">Round 1/5</span>
+                        <span id="game-timer-visual">0.0s</span>
+                    </div>
+                    <div class="visual-grid" id="visual-grid"></div>
+                </div>
+            </div>
+
+            <!-- Go/No-Go Game -->
+            <div class="game-container" id="container-gonogo" style="display: none;">
+                <div class="game-card" id="game-intro-gonogo">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🚦</div>
+                    <h3 style="font-size: 1.75rem; color: var(--primary-dark); margin-bottom: 1rem;">Go/No-Go Inhibition</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">Press <strong>SPACEBAR (or tap)</strong> quickly when you see the <span style="color: #22c55e; font-weight: bold;">Green Circle (GO)</span>.<br>Do NOT press anything when you see the <span style="color: #ef4444; font-weight: bold;">Red Cross (NO-GO)</span>.</p>
+                    <button class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 3rem;" onclick="startGonogoGame()">Start</button>
+                    <button class="btn btn-secondary" style="font-size: 1.2rem; padding: 1rem 3rem; margin-left: 1rem;" onclick="showGameSelector()">Back</button>
+                </div>
+
+                <div class="game-card" id="game-play-gonogo" style="display: none;" onclick="handleGonogoTap()">
+                    <div class="game-header">
+                        <span id="game-round-gonogo">20 stimuli</span>
+                        <span id="game-instruction-gonogo">Wait for signal...</span>
+                    </div>
+                    <div class="gonogo-display" id="gonogo-display">
+                        <span style="font-size: 2rem; color: var(--text-secondary);">Ready</span>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-top: 2rem;">Tap here or press SPACEBAR to respond to GO signals.</p>
+                </div>
+            </div>
+
+            <!-- Shared Game Results -->
+            <div class="game-container" id="shared-game-results" style="display: none;">
+                <div class="game-card">
+                    <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Assessment Complete!</h3>
+                    <div class="result-header">
+                        <div class="result-icon-large" id="shared-result-icon">🧠</div>
+                        <div class="result-info" style="text-align: left;">
+                            <div class="result-risk-level" id="shared-risk-level">Analyzing...</div>
+                            <div class="result-confidence" id="shared-risk-score">Calculating...</div>
+                        </div>
+                    </div>
+                    <div class="game-stats" id="shared-stats-container"></div>
+                    <p id="shared-feedback" class="feedback-text">Please wait while we evaluate your cognitive profile...</p>
+                    <div style="margin-top: 2rem;">
+                        <button class="btn btn-primary" id="btn-replay-current" style="margin-right: 1rem;" onclick="replayCurrentGame()">Play Again</button>
+                        <button class="btn btn-secondary" onclick="showGameSelector()">Back to Menu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<footer class="footer">
+        <div class="container">
+            <p class="disclaimer">This is a screening tool only and does not provide medical diagnosis. Please consult a
+                healthcare professional for proper evaluation.</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot Floating Action Button -->
+    <div class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()">
+        🌈
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container hidden" id="chatbot-container">
+        <div class="chatbot-header" onclick="toggleChat()">
+            <div class="chatbot-title">
+                <span style="font-size: 1.25rem;">🌈</span> AI Assistant
+            </div>
+            <button class="close-chat-btn" id="chatbot-close-btn">&times;</button>
+        </div>
+        <div class="chatbot-body" id="chatbot-body">
+            <div class="chat-message bot-message">
+                Hello! I'm the Autism Prediction AI Assistant. I can help answer questions about autism screening, how
+                our tool works, or explain the assessment results. How can I help you today?
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chat-input" placeholder="Type your question here..."
+                onkeypress="handleChatSubmit(event)">
+            <button class="chat-send-btn" onclick="sendChatMessage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="app.js?v=2"></script>
+</body>
+
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autism Prediction - Autism Prediction</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🧠</span>
+                <span class="logo-text">Autism Prediction</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="video-analysis.html">Video Analysis</a></li>
+                <li><a href="game.html">Mini Game</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="video-analysis" class="video-analysis-section">
+        <div class="container">
+            <h2>Video Analysis</h2>
+            <p class="section-intro">Upload a video for behavioral analysis. Our AI will analyze facial expressions, eye
+                contact patterns, and movement behaviors commonly associated with autism spectrum traits.</p>
+
+            <div class="video-upload-container">
+                <div class="upload-methods">
+                    <div class="method-card" id="upload-method">
+                        <div class="method-icon">📁</div>
+                        <h3>Upload Video</h3>
+                        <p>Select a video file from your device</p>
+                        <input type="file" id="video-input" accept="video/*" style="display: none;">
+                        <button class="btn btn-primary" onclick="document.getElementById('video-input').click()">Choose
+                            File</button>
+                        <p class="file-name" id="file-name">No file selected</p>
+                    </div>
+
+                    <div class="method-card" id="record-method">
+                        <div class="method-icon">🎥</div>
+                        <h3>Record Video</h3>
+                        <p>Record a video using your camera</p>
+                        <button class="btn btn-primary" id="start-record-btn">Start Recording</button>
+                        <button class="btn btn-secondary" id="stop-record-btn" style="display: none;">Stop
+                            Recording</button>
+                    </div>
+                </div>
+
+                <div class="video-preview-container" id="video-preview-container" style="display: none;">
+                    <video id="video-preview" controls></video>
+                    <video id="recording-preview" controls style="display: none;"></video>
+
+                    <!-- Manual Text Fallback Option -->
+                    <div class="manual-video-input"
+                        style="margin-top: 1.5rem; margin-bottom: 1.5rem; text-align: left;">
+                        <label for="video-manual-desc"
+                            style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem; color: var(--text-secondary);">
+                            Optional: Describe what is happening in the video (e.g. "child avoids eye contact",
+                            "repetitive hand flapping") to guide the AI if automatic analysis fails.
+                        </label>
+                        <textarea id="video-manual-desc" rows="3" placeholder="Enter behavioral observations..."
+                            style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--dark-bg); color: var(--text-primary); resize: vertical; margin-bottom: 1rem;"></textarea>
+                    </div>
+
+                    <div class="video-controls">
+                        <button class="btn btn-primary" id="analyze-video-btn">Analyze Video</button>
+                        <button class="btn btn-secondary" id="clear-video-btn">Clear</button>
+                    </div>
+                </div>
+
+                <div class="analysis-progress" id="analysis-progress" style="display: none;">
+                    <div class="progress-icon">🔍</div>
+                    <h3>Analyzing Video...</h3>
+                    <p>Our AI is analyzing behavioral patterns in your video</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p class="progress-text" id="progress-text">Processing frames...</p>
+                </div>
+
+                <div class="video-results" id="video-results" style="display: none;">
+                    <h3>Video Analysis Results</h3>
+
+                    <div class="result-header" id="video-result-header">
+                        <div class="result-icon-large" id="video-result-icon">🧠</div>
+                        <div class="result-info">
+                            <div class="result-risk-level" id="video-risk-level">Analyzing...</div>
+                            <div class="result-confidence" id="video-confidence">--</div>
+                        </div>
+                    </div>
+
+                    <div class="result-description-box" id="video-result-description">
+                        <!-- Results description will be inserted here -->
+                    </div>
+
+                    <!-- NEW: What the AI Analyzed Explanation -->
+                    <div class="analysis-explanation" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08)); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
+                        <h4 style="margin-bottom: 1rem; color: #8b5cf6; display: flex; align-items: center; gap: 8px;">
+                            <span>🔬</span> What Did the AI Analyze?
+                        </h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                            The AI performed a multi-stage behavioral analysis on your uploaded video. Here are the <strong>6 behavioral categories</strong> that were evaluated:
+                        </p>
+                        <div class="analysis-categories" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #6366f1;">
+                                <strong style="color: #818cf8;">A — Eye Contact & Facial Interaction</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Gaze direction, face orientation, eye contact avoidance, and facial emotion variation across frames.</p>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #8b5cf6;">
+                                <strong style="color: #a78bfa;">B — Social Interaction</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Engagement with nearby people, response to interaction attempts, imitation of actions, and proximity avoidance.</p>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #ec4899;">
+                                <strong style="color: #f472b6;">C — Repetitive Behaviors</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Hand flapping, body rocking, spinning, finger flicking, repetitive jumping, and repetitive clapping (motion cycle analysis).</p>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #f59e0b;">
+                                <strong style="color: #fbbf24;">D — Motor Pattern Differences</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Toe walking, stiff movement, unusual posture, joint angles, and walking gait analysis.</p>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #10b981;">
+                                <strong style="color: #34d399;">E — Attention Patterns</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Long fixation on objects, watching spinning objects, difficulty shifting gaze, and gaze fixation duration.</p>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #ef4444;">
+                                <strong style="color: #f87171;">F — Sensory Response Behaviors</strong>
+                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Covering ears, sudden agitation, turning away from stimuli, hand-to-head gestures, and motion bursts.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="markers-detected">
+                        <h4>Behaviors Detected</h4>
+                        <div class="markers-list" id="markers-list">
+                            <!-- Markers will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="analysis-details">
+                        <h4>Feature Vector & Detailed Scores</h4>
+                        <div class="details-list" id="analysis-details">
+                            <!-- Analysis details will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- NEW: Risk Score Formula Explanation -->
+                    <div class="risk-formula-section" style="background: rgba(239, 68, 68, 0.06); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
+                        <h4 style="margin-bottom: 0.8rem; color: #f87171; display: flex; align-items: center; gap: 8px;">
+                            <span>📐</span> How the Risk Score is Calculated
+                        </h4>
+                        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.8rem;">The final Autism Behavior Risk Score is a weighted combination of the category scores:</p>
+                        <div style="background: rgba(0,0,0,0.05); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.85rem; color: var(--text-primary); line-height: 1.8;">
+                            Risk Score =<br>
+                            &nbsp;&nbsp;0.25 × <span style="color: #818cf8;">Eye Contact Score</span><br>
+                            + 0.30 × <span style="color: #f472b6;">Repetitive Behavior Score</span><br>
+                            + 0.20 × <span style="color: #a78bfa;">Social Interaction Score</span><br>
+                            + 0.15 × <span style="color: #34d399;">Attention Pattern Score</span><br>
+                            + 0.10 × <span style="color: #f87171;">Sensory Response Score</span>
+                        </div>
+                        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.8rem;">
+                            <strong>High Risk:</strong> Score ≥ 0.70 &nbsp;|&nbsp; <strong>Moderate Risk:</strong> Score 0.40–0.69 &nbsp;|&nbsp; <strong>Low Risk:</strong> Score &lt; 0.40
+                        </p>
+                    </div>
+
+                    <div class="result-actions">
+                        <button class="btn btn-secondary" id="new-video-btn">Analyze New Video</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-guidelines">
+                <h3>Video Recording Guidelines</h3>
+                <ul>
+                    <li>📹 Ensure good lighting - face should be clearly visible</li>
+                    <li>👤 Face the camera directly for best eye contact analysis</li>
+                    <li>⏱️ Record for 30 seconds to 2 minutes</li>
+                    <li>🎯 Keep your face centered in the frame</li>
+                    <li>🔇 Record in a quiet environment</li>
+                    <li>🚫 Avoid wearing sunglasses or items that cover your face</li>
+                </ul>
+                <p class="disclaimer-text">Note: Video analysis provides preliminary observations only. For accurate
+                    diagnosis, please consult with a healthcare professional.</p>
+            </div>
+        </div>
+    </section>
+
+<footer class="footer">
+        <div class="container">
+            <p class="disclaimer">This is a screening tool only and does not provide medical diagnosis. Please consult a
+                healthcare professional for proper evaluation.</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot Floating Action Button -->
+    <div class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()">
+        🌈
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container hidden" id="chatbot-container">
+        <div class="chatbot-header" onclick="toggleChat()">
+            <div class="chatbot-title">
+                <span style="font-size: 1.25rem;">🌈</span> AI Assistant
+            </div>
+            <button class="close-chat-btn" id="chatbot-close-btn">&times;</button>
+        </div>
+        <div class="chatbot-body" id="chatbot-body">
+            <div class="chat-message bot-message">
+                Hello! I'm the Autism Prediction AI Assistant. I can help answer questions about autism screening, how
+                our tool works, or explain the assessment results. How can I help you today?
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chat-input" placeholder="Type your question here..."
+                onkeypress="handleChatSubmit(event)">
+            <button class="chat-send-btn" onclick="sendChatMessage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
