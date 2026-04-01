@@ -1,3 +1,7 @@
+"""
+Spectrum Sonar - Autism Prediction Web Application
+Flask Backend with Machine Learning and Video Analysis
+"""
 
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
@@ -113,6 +117,10 @@ def index():
     """Render the main page"""
     return send_from_directory('.', 'index.html')
 
+@app.route('/dashboard')
+def dashboard():
+    """Render the admin dashboard"""
+    return send_from_directory('.', 'dashboard.html')
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -319,13 +327,11 @@ def make_fallback_prediction(features):
 
 def analyze_video_behavior(video_path):
     """
-    Analyze video for autism-related behavioral markers using MediaPipe Face Mesh and Pose.
+    Analyze video for autism-related behavioral markers using MediaPipe Face Mesh.
     Detects:
     - Eye contact patterns (Eye Aspect Ratio / Gaze direction estimate)
     - Blinking patterns
     - Head movement (Pose estimation)
-    - Body rocking (Shoulder movement)
-    - Hand flapping (Wrist movement speed)
     """
     results = {
         'faces_detected': 0,
@@ -342,7 +348,6 @@ def analyze_video_behavior(video_path):
     try:
         import mediapipe as mp
         mp_face_mesh = mp.solutions.face_mesh
-        mp_pose = mp.solutions.pose
         
         # Open video file
         cap = cv2.VideoCapture(video_path)
@@ -350,14 +355,10 @@ def analyze_video_behavior(video_path):
         if not cap.isOpened():
             return get_fallback_video_analysis()
 
-        # MediaPipe configurations
+        # Face Mesh configuration
         face_mesh = mp_face_mesh.FaceMesh(
             max_num_faces=1,
             refine_landmarks=True,
-            min_detection_confidence=0.5,
-            min_tracking_confidence=0.5
-        )
-        pose = mp_pose.Pose(
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5
         )
@@ -370,13 +371,6 @@ def analyze_video_behavior(video_path):
         prev_nose_pos = None
         movement_history = []
         gaze_scores = []
-        
-        # New Pose Tracking Variables
-        prev_shoulders_y_avg = None
-        shoulder_y_movements = []
-        prev_left_wrist = None
-        prev_right_wrist = None
-        wrist_speeds = []
         
         # EAR indices for mediapipe
         LEFT_EYE = [362, 385, 387, 263, 373, 380]
@@ -404,19 +398,15 @@ def analyze_video_behavior(video_path):
             results['frames_analyzed'] += 1
             
             # Convert color for MediaPipe
-            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            image_rgb.flags.writeable = False
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image.flags.writeable = False
+            mesh_results = face_mesh.process(image)
             
-            # Process Frame Details
-            mesh_results = face_mesh.process(image_rgb)
-            pose_results = pose.process(image_rgb)
-            
-            # --- 1. FACE MESH ANALYSIS ---
             if mesh_results.multi_face_landmarks:
                 results['faces_detected'] += 1
                 face_landmarks = mesh_results.multi_face_landmarks[0].landmark
                 
-                # A. BLINK DETECTION (EAR)
+                # 1. BLINK DETECTION (EAR)
                 left_ear = calculate_ear(LEFT_EYE, face_landmarks)
                 right_ear = calculate_ear(RIGHT_EYE, face_landmarks)
                 avg_ear = (left_ear + right_ear) / 2.0
@@ -429,7 +419,8 @@ def analyze_video_behavior(video_path):
                 else:
                     is_blinking = False
                 
-                # B. EYE CONTACT / GAZE (Approximated by iris position relative to eye center)
+                # 2. EYE CONTACT / GAZE (Approximated by iris position relative to eye center)
+                # Iris landmarks (approx 468, 473) compared to eye corners
                 left_iris_x = face_landmarks[468].x
                 left_eye_inner_x = face_landmarks[133].x
                 left_eye_outer_x = face_landmarks[33].x
@@ -440,72 +431,34 @@ def analyze_video_behavior(video_path):
                     # If gaze_ratio is around 0.5, looking straight. If < 0.3 or > 0.7, looking away.
                     gaze_scores.append(100 if 0.35 < gaze_ratio < 0.65 else 20)
                 
-                # C. HEAD MOVEMENT (Tracking nose tip - landmark 1)
+                # 3. HEAD MOVEMENT (Tracking nose tip - landmark 1)
                 nose_tip = np.array([face_landmarks[1].x, face_landmarks[1].y])
                 if prev_nose_pos is not None:
                     movement = np.linalg.norm(nose_tip - prev_nose_pos) * 1000 # Scaling for readability
                     movement_history.append(movement)
                 prev_nose_pos = nose_tip
                 
-            # --- 2. POSE ANALYSIS ---
-            if pose_results.pose_landmarks:
-                landmarks = pose_results.pose_landmarks.landmark
-                
-                # D. BODY ROCKING (Shoulders up/down tracking)
-                l_shoulder_y = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y
-                r_shoulder_y = landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y
-                avg_shoulder_y = (l_shoulder_y + r_shoulder_y) / 2.0
-                
-                if prev_shoulders_y_avg is not None:
-                    # Positive movement indicates rocking or bouncing
-                    sh_movement = abs(avg_shoulder_y - prev_shoulders_y_avg) * 1000 # Scale for readability
-                    shoulder_y_movements.append(sh_movement)
-                prev_shoulders_y_avg = avg_shoulder_y
-                
-                # E. HAND FLAPPING (Rapid wrist movement tracking)
-                l_wrist = np.array([landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x, 
-                                    landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y])
-                r_wrist = np.array([landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x, 
-                                    landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y])
-                
-                if prev_left_wrist is not None and prev_right_wrist is not None:
-                    l_dist = np.linalg.norm(l_wrist - prev_left_wrist) * 1000
-                    r_dist = np.linalg.norm(r_wrist - prev_right_wrist) * 1000
-                    # Sum the speed of both wrists
-                    wrist_speeds.append(l_dist + r_dist)
-                    
-                prev_left_wrist = l_wrist
-                prev_right_wrist = r_wrist
-
             frame_count += 1
             
         cap.release()
         face_mesh.close()
-        pose.close()
         
-        # --- 3. ANALYZE COLLECTED METRICS ---
+        # Analyze collected metrics
         if results['faces_detected'] > 0:
-            # A. Eye Contact
+            # Aggregate Eye Contact
             avg_gaze = sum(gaze_scores) / len(gaze_scores) if gaze_scores else 50
             results['eye_contact_score'] = min(100, int(avg_gaze * (results['faces_detected'] / results['frames_analyzed'])))
             
-            if results['eye_contact_score'] < 45:
-                results['autism_markers'].append({
-                    'marker': 'Limited Eye Contact',
-                    'description': 'Gaze estimation indicates the subject frequently looked away from the camera.',
-                    'severity': 'high'
-                })
-            
-            # B. Blink Rate
+            # Analyze Blink Rate
             blink_rate = blink_count / (results['frames_analyzed'] / 30.0) # Approx blinks per second (assuming 30fps)
             if blink_rate < 0.1 or blink_rate > 1.0:
                 results['autism_markers'].append({
                     'marker': 'Atypical Blink Rate',
-                    'description': f'Unusual blink pattern detected ({blink_count} blinks in short duration).',
+                    'description': f'Unusual blink pattern detected ({blink_count} blinks in short duration)',
                     'severity': 'mild'
                 })
                 
-            # C. Head Movement
+            # Analyze Head Movement
             if movement_history:
                 avg_movement = sum(movement_history) / len(movement_history)
                 move_variance = np.var(movement_history) if len(movement_history) > 1 else 0
@@ -525,30 +478,14 @@ def analyze_video_behavior(video_path):
                         'severity': 'moderate'
                     })
 
-            # D. Body Rocking (Shoulder Bounce)
-            if shoulder_y_movements:
-                sh_variance = np.var(shoulder_y_movements) if len(shoulder_y_movements) > 1 else 0
-                # If the variance of the shoulder's Y axis is high, it indicates constant up/down bouncing
-                if sh_variance > 30: 
-                    results['autism_markers'].append({
-                        'marker': 'Body Rocking',
-                        'description': 'Constant vertical shoulder movement detected, indicating potential body rocking.',
-                        'severity': 'high'
-                    })
-                    
-            # E. Hand Flapping (Rapid Wrist Speed Variance)
-            if wrist_speeds:
-                avg_wrist_speed = sum(wrist_speeds) / len(wrist_speeds)
-                wrist_variance = np.var(wrist_speeds) if len(wrist_speeds) > 1 else 0
+            # Check Eye Contact Marker
+            if results['eye_contact_score'] < 45:
+                results['autism_markers'].append({
+                    'marker': 'Limited Eye Contact',
+                    'description': 'Gaze estimation indicates the subject frequently looked away from the camera.',
+                    'severity': 'high'
+                })
                 
-                # High average speed with high variance often indicates rapid flapping rather than smooth reaching
-                if avg_wrist_speed > 40 and wrist_variance > 800:
-                    results['autism_markers'].append({
-                        'marker': 'Hand Flapping',
-                        'description': 'Rapid, repetitive wrist movements detected consistently.',
-                        'severity': 'high'
-                    })
-
             # Calculate Confidence Score based on real markers
             marker_count = len(results['autism_markers'])
             results['confidence_score'] = min(95, 40 + marker_count * 15)
@@ -563,8 +500,6 @@ def analyze_video_behavior(video_path):
 
     except Exception as e:
         print(f"Error analyzing video with mediapipe: {e}")
-        import traceback
-        traceback.print_exc()
         return get_fallback_video_analysis()
 
 
@@ -663,90 +598,99 @@ def analyze_video():
 
 
 def generate_video_prediction(analysis_results, manual_text=""):
-    """Generate prediction based purely on deterministic video analysis results and manual observation."""
+    """Generate prediction based on video analysis results, using Gemini for the description."""
     confidence = analysis_results.get('confidence_score', 0)
     markers = analysis_results.get('autism_markers', [])
     marker_count = len(markers)
     
-    # Extract metrics securely
-    eye_contact_score = analysis_results.get('eye_contact_score', 50)
-    
-    # 1. Determine risk level and status based on concrete thresholds from physical markers
+    # Determine risk level based on thresholds
     if confidence >= 70 or marker_count >= 3:
-        risk_level = 'high_risk'
+        risk_level = 'High Risk'
         status = 'positive'
     elif confidence >= 40 or marker_count >= 1:
-        risk_level = 'moderate_risk'
+        risk_level = 'Moderate Risk'
         status = 'moderate'
     else:
-        risk_level = 'low_risk'
+        risk_level = 'Low Risk'
         status = 'negative'
 
-    # 2. Extract behaviors definitively observed by MediaPipe or manual entry
-    behaviors_detected = [m['marker'].lower().replace(' ', '_') for m in markers]
+    description = ""
+    bytez_api_key = os.environ.get("BYTEZ_API_KEY")
+    gemini_api_key = os.environ.get("GEMINI_API_KEY")
+    
+    system_prompt = f"""
+    You are the medical AI assistant for Spectrum Sonar. We just analyzed a user's video using MediaPipe Face Mesh.
+    
+    Here are our findings:
+    Risk Level: {risk_level}
+    Confidence Score: {confidence}%
+    Markers Detected: {", ".join([f"{m['marker']} ({m['description']})" for m in markers]) if markers else "None"}
+    """
     
     if manual_text.strip():
-        # Clean basic text injection for observed tags without hallucination
-        manual_cleaned = manual_text.lower()
-        if 'flap' in manual_cleaned: behaviors_detected.append('hand_flapping')
-        if 'rock' in manual_cleaned: behaviors_detected.append('body_rocking')
-        if 'toe' in manual_cleaned: behaviors_detected.append('toe_walking')
-        if 'avoid' in manual_cleaned and 'eye' in manual_cleaned: behaviors_detected.append('eye_contact_avoidance')
-        
-    behaviors_detected = list(set(behaviors_detected)) # Remove duplicates
-
-    # 3. Build detailed labels deterministically based only on what we have
-    detailed_labels = {}
-    for marker in markers:
-        name = marker['marker'].lower().replace(' ', '_')
-        severity_value = 0.8 if marker.get('severity') == 'high' else 0.5 if marker.get('severity') == 'moderate' else 0.3
-        detailed_labels[name] = {
-            "confidence": round(severity_value + (confidence / 200.0), 2), # Bounded deterministic math
-            "description": marker['description']
-        }
-        
-    # Scale eye contact explicitly
-    eye_contact_feature = 1.0 - (eye_contact_score / 100.0) # Lower eye contact score = higher autism feature indicator
-        
-    # 4. Feature Vector mapping (deterministic)
-    # Mapping: [eye_contact, facial_expression, social_interaction, hand_flapping, body_rocking, repetitive_motion, toe_walking, object_fixation, sensory_response]
-    feature_vector = [
-        round(eye_contact_feature, 2),
-        0.5 if 'atypical_blink_rate' in behaviors_detected else 0.1,
-        0.5 if 'limited_eye_contact' in behaviors_detected else 0.1,
-        0.9 if 'hand_flapping' in behaviors_detected else 0.0,
-        0.9 if 'body_rocking' in behaviors_detected else 0.0,
-        0.8 if 'repetitive_movement' in behaviors_detected else 0.1,
-        0.9 if 'toe_walking' in behaviors_detected else 0.0,
-        0.1, # Not easily detectable by our current MediaPipe
-        0.1  # Not easily detectable by our current MediaPipe
-    ]
+        system_prompt += f"\nAdditionally, the user provided this manual behavioral observation via text input: \"{manual_text}\"\n"
+        system_prompt += "Please factor this user observation into your analysis summary heavily.\n"
     
-    # 5. Calculate Final Risk Score Algorithmically
-    # Weights: 0.25*EyeContact + 0.30*Repetitive + 0.20*Social + 0.15*Attention + 0.10*Sensory
-    calculated_risk = (
-        (0.25 * feature_vector[0]) + 
-        (0.30 * max(feature_vector[3], feature_vector[4], feature_vector[5])) +
-        (0.20 * feature_vector[2]) +
-        (0.15 * feature_vector[7]) +
-        (0.10 * feature_vector[8])
-    )
+    system_prompt += """
+    Write an empathetic, concise (3-4 sentences), and easily understandable summary of these results to show the user on the screen. 
+    Do NOT give a definitive medical diagnosis. Remind them to consult a professional for clinical evaluation.
+    """
     
-    # Adjust calculated risk upwards strictly based on confidence from physics model
-    final_risk_score = round(min(0.99, max(0.01, calculated_risk + (confidence / 200.0))), 2)
-
-    # 6. Return deterministic formatted data
-    structured_data = {
-        "video_id": f"video_{int(datetime.now().timestamp())}",
-        "risk_score": final_risk_score,
-        "risk_level": risk_level,
-        "behaviors_detected": behaviors_detected,
-        "feature_vector": feature_vector,
-        "detailed_labels": detailed_labels,
-        "disclaimer": "These results are behavioral indicators measured by MediaPipe tracking algorithms and cannot be used for medical diagnosis."
+    if bytez_api_key and "YOUR_BYTEZ" not in bytez_api_key:
+        try:
+            import bytez
+            client = bytez.Bytez(bytez_api_key)
+            model = client.model("Qwen/Qwen2.5-1.5B-Instruct")
+            
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": "Please provide the summary of the video analysis findings."}
+            ]
+            response = model.run(messages)
+            
+            output = getattr(response, 'output', response)
+            if isinstance(output, dict) and 'content' in output:
+                reply_text = output['content']
+            elif isinstance(output, list) and len(output) > 0 and 'generated_text' in output[0]:
+                reply_text = output[0]['generated_text']
+            elif isinstance(output, list) and len(output) > 0 and 'content' in output[0]:
+                reply_text = output[0]['content']
+            elif hasattr(response, 'output'):
+                reply_text = str(response.output)
+            else:
+                reply_text = str(output)
+                 
+            description = str(reply_text)
+        except Exception as e:
+            print(f"Bytez Analysis Error: {e}")
+            
+    # Fallback to Gemini if Bytez fails or is not enabled
+    if not description and gemini_api_key and "YOUR_API_KEY" not in gemini_api_key:
+        try:
+            genai.configure(api_key=gemini_api_key)
+            model = genai.GenerativeModel('gemini-2.5-flash')
+            response = model.generate_content(system_prompt + "\nPlease provide the summary.")
+            description = response.text
+        except Exception as e:
+            print(f"Gemini Analysis Error: {e}")
+            
+    # Fallback to hardcoded strings if Gemini fails or is not enabled
+    if not description:
+        if risk_level == 'High Risk':
+            description = f'The video analysis found {marker_count} autism-specific markers with {confidence:.0f}% confidence. Please consult with a healthcare professional for a comprehensive evaluation including clinical assessment.'
+        elif risk_level == 'Moderate Risk':
+            description = f'The video analysis detected {marker_count} marker(s) with {confidence:.0f}% confidence. A healthcare professional can provide a more accurate assessment through direct evaluation.'
+        else:
+            description = f'The video analysis did not detect significant autism-related behavioral patterns. It found {marker_count} marker(s) with {confidence:.0f}% confidence. If you have concerns, please consult with a healthcare professional.'
+    
+    return {
+        'risk_level': risk_level,
+        'status': status,
+        'description': description,
+        'confidence': confidence,
+        'markers_found': marker_count,
+        'detailed_markers': markers
     }
-        
-    return structured_data
 
 
 @app.route('/health', methods=['GET'])
@@ -758,5 +702,4 @@ def health():
     })
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5001))
-    app.run(debug=False, host='0.0.0.0', port=port)
+    app.run(debug=True, port=5001)

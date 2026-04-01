@@ -4,9 +4,4 @@ pandas
 numpy
 scikit-learn
 joblib
-opencv-python-headless
-google-generativeai
-python-dotenv
-mediapipe
-gunicorn
-bytez
+opencv-python

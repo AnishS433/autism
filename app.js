@@ -1,14 +1,5 @@
-// Autism Prediction - Autism Prediction Web Application
+// Spectrum Sonar - Autism Prediction Web Application
 // JavaScript for handling form submissions, predictions, and video analysis
-
-// ===================== CONFIGURATION =====================
-// IMPORTANT: Change this URL to your Render backend URL after deployment
-// For local development: 'http://127.0.0.1:5001'
-// For production: 'https://your-app-name.onrender.com'
-const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
-    ? 'http://127.0.0.1:5001'
-    : 'https://autism-vt04.onrender.com';  // <-- UPDATE THIS after Render deploy
-// =========================================================
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('autism-form');
@@ -107,7 +98,7 @@ function collectFormData() {
 
 async function makePrediction(data) {
     try {
-        const response = await fetch(`${API_BASE_URL}/predict`, {
+        const response = await fetch('http://127.0.0.1:5001/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -443,7 +434,7 @@ async function analyzeVideo() {
         }
 
         // Send to backend for analysis
-        const response = await fetch(`${API_BASE_URL}/analyze-video`, {
+        const response = await fetch('http://127.0.0.1:5001/analyze-video', {
             method: 'POST',
             body: formData
         });
@@ -471,103 +462,83 @@ async function analyzeVideo() {
 }
 
 function displayVideoResults(result) {
-    const analysis = result.analysis; // This now holds the JSON from LLM or fallback
-    
-    // Safety check in case prediction object was passed directly
-    const data = result.prediction || analysis;
+    const prediction = result.prediction;
+    const analysis = result.analysis;
 
     // Set result icon
     const resultIcon = document.getElementById('video-result-icon');
-    if (data.risk_level === 'high') {
+    if (prediction.status === 'positive') {
         resultIcon.textContent = '⚠️';
-        document.getElementById('video-risk-level').className = 'result-risk-level positive';
-    } else if (data.risk_level === 'moderate' || data.risk_level === 'medium') {
+    } else if (prediction.status === 'moderate') {
         resultIcon.textContent = '🤔';
-        document.getElementById('video-risk-level').className = 'result-risk-level moderate';
     } else {
         resultIcon.textContent = '✅';
-        document.getElementById('video-risk-level').className = 'result-risk-level negative';
     }
 
     // Set risk level and confidence
-    document.getElementById('video-risk-level').textContent = (data.risk_level || 'Unknown').toUpperCase() + ' RISK';
-    
-    // In our new JSON, confidence isn't top-level, risk_score is. We convert risk_score to percentage.
-    const riskScorePct = data.risk_score ? Math.round(data.risk_score * 100) : 0;
-    document.getElementById('video-confidence').textContent = riskScorePct + '% Risk Score';
+    document.getElementById('video-risk-level').textContent = prediction.risk_level;
+    document.getElementById('video-risk-level').className = 'result-risk-level ' + prediction.status;
+    document.getElementById('video-confidence').textContent = prediction.confidence + '% Confidence';
 
-    // Set description (Notice or Disclaimer)
+    // Set description
     document.getElementById('video-result-description').innerHTML = `
-        <p><strong>Notice:</strong> ${data.disclaimer || 'These results are behavioral indicators only and cannot be used for medical diagnosis.'}</p>
+        <p>${prediction.description}</p>
     `;
 
-    // Display autism markers (behaviors_detected)
+    // Display autism markers
     const markersList = document.getElementById('markers-list');
-    if (data.detailed_labels && Object.keys(data.detailed_labels).length > 0) {
+    if (prediction.detailed_markers && prediction.detailed_markers.length > 0) {
         let markersHTML = '';
 
-        for (const [behavior, details] of Object.entries(data.detailed_labels)) {
-            // Determine severity visually by confidence
-            const conf = details.confidence || 0.5;
-            const severityClass = conf > 0.7 ? 'severity-high' :
-                                  conf > 0.4 ? 'severity-medium' : 'severity-low';
-
-            const severityText = conf > 0.7 ? 'High Confidence' :
-                                 conf > 0.4 ? 'Medium Confidence' : 'Low Confidence';
-
-            // Format behavior name (e.g., eye_contact_avoidance -> Eye Contact Avoidance)
-            const formattedBehavior = behavior.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        prediction.detailed_markers.forEach(marker => {
+            const severityClass = marker.severity === 'moderate' ? 'severity-high' :
+                marker.severity === 'mild' ? 'severity-low' : 'severity-medium';
 
             markersHTML += `
                 <div class="marker-item ${severityClass}">
                     <div class="marker-header">
-                        <span class="marker-name">${formattedBehavior}</span>
-                        <span class="marker-severity ${severityClass}">${severityText} (${Math.round(conf * 100)}%)</span>
+                        <span class="marker-name">${marker.marker}</span>
+                        <span class="marker-severity ${severityClass}">${marker.severity}</span>
                     </div>
-                    ${details.duration ? `<p class="marker-description">Observed Duration: ${details.duration}s</p>` : ''}
-                    ${details.count !== undefined ? `<p class="marker-description">Occurrences: ${details.count}</p>` : ''}
+                    <p class="marker-description">${marker.description}</p>
                 </div>
             `;
-        }
+        });
 
         markersList.innerHTML = markersHTML;
-    } else if (data.behaviors_detected && data.behaviors_detected.length > 0) {
-         let markersHTML = '';
-         data.behaviors_detected.forEach(behavior => {
-            const formattedBehavior = behavior.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-            markersHTML += `
-                <div class="marker-item severity-medium">
-                    <div class="marker-header">
-                        <span class="marker-name">${formattedBehavior}</span>
-                    </div>
-                </div>
-            `;
-         });
-         markersList.innerHTML = markersHTML;
     } else {
         markersList.innerHTML = '<p class="no-markers">No specific autism-related markers detected in this video.</p>';
     }
 
-    // Display analysis details (Feature Vector)
+    // Display analysis details
     const detailsList = document.getElementById('analysis-details');
-    let detailsHTML = '<div class="detail-item"><span class="detail-type" style="width:100%; font-weight:bold; margin-bottom: 5px;">Feature Vector (ML Inputs):</span></div>';
+    let detailsHTML = '';
 
-    if (data.feature_vector && data.feature_vector.length > 0) {
-        const labels = ['Eye Contact', 'Facial Exp', 'Social', 'Hand Flap', 'Body Rock', 'Repetitive', 'Toe Walk', 'Fixation', 'Sensory'];
-        
-        data.feature_vector.forEach((val, index) => {
-            if(index < labels.length) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <span class="detail-type">${labels[index]}</span>
-                        <span class="detail-text">${typeof val === 'number' ? val.toFixed(2) : val}</span>
-                    </div>
-                `;
-            }
+    if (analysis.analysis_details) {
+        analysis.analysis_details.forEach(detail => {
+            detailsHTML += `
+                <div class="detail-item">
+                    <span class="detail-type">${detail.type}</span>
+                    <span class="detail-text">${detail.detail}</span>
+                </div>
+            `;
         });
-    } else {
-        detailsHTML += '<p style="color:#666; font-size:14px; padding:10px;">No feature vector available.</p>';
     }
+
+    detailsHTML += `
+        <div class="detail-item">
+            <span class="detail-type">frames</span>
+            <span class="detail-text">${analysis.frames_analyzed} frames analyzed</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-type">faces</span>
+            <span class="detail-text">${analysis.faces_detected} faces detected</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-type">eye_contact</span>
+            <span class="detail-text">${analysis.eye_contact_score}% eye contact score</span>
+        </div>
+    `;
 
     detailsList.innerHTML = detailsHTML;
 
@@ -663,7 +634,7 @@ async function sendChatMessage() {
     chatBody.scrollTop = chatBody.scrollHeight;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/chat`, {
+        const response = await fetch('http://127.0.0.1:5001/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: message })

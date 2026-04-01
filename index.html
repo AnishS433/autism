@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autism Prediction - Autism Prediction</title>
+    <title>Spectrum Sonar - Autism Prediction</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -13,7 +15,7 @@
         <div class="container">
             <div class="logo">
                 <span class="logo-icon">🧠</span>
-                <span class="logo-text">Autism Prediction</span>
+                <span class="logo-text">Spectrum Sonar</span>
             </div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
@@ -43,7 +45,7 @@
 
     <section id="about" class="about">
         <div class="container">
-            <h2>About Autism Prediction</h2>
+            <h2>About Spectrum Sonar</h2>
             <div class="about-grid">
                 <div class="about-card">
                     <div class="card-icon">📊</div>
@@ -421,73 +423,18 @@
                         <!-- Results description will be inserted here -->
                     </div>
 
-                    <!-- NEW: What the AI Analyzed Explanation -->
-                    <div class="analysis-explanation" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08)); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
-                        <h4 style="margin-bottom: 1rem; color: #8b5cf6; display: flex; align-items: center; gap: 8px;">
-                            <span>🔬</span> What Did the AI Analyze?
-                        </h4>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                            The AI performed a multi-stage behavioral analysis on your uploaded video. Here are the <strong>6 behavioral categories</strong> that were evaluated:
-                        </p>
-                        <div class="analysis-categories" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
-                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #6366f1;">
-                                <strong style="color: #818cf8;">A — Eye Contact & Facial Interaction</strong>
-                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Gaze direction, face orientation, eye contact avoidance, and facial emotion variation across frames.</p>
-                            </div>
-                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #8b5cf6;">
-                                <strong style="color: #a78bfa;">B — Social Interaction</strong>
-                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Engagement with nearby people, response to interaction attempts, imitation of actions, and proximity avoidance.</p>
-                            </div>
-                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #ec4899;">
-                                <strong style="color: #f472b6;">C — Repetitive Behaviors</strong>
-                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Hand flapping, body rocking, spinning, finger flicking, repetitive jumping, and repetitive clapping (motion cycle analysis).</p>
-                            </div>
-                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #f59e0b;">
-                                <strong style="color: #fbbf24;">D — Motor Pattern Differences</strong>
-                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Toe walking, stiff movement, unusual posture, joint angles, and walking gait analysis.</p>
-                            </div>
-                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #10b981;">
-                                <strong style="color: #34d399;">E — Attention Patterns</strong>
-                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Long fixation on objects, watching spinning objects, difficulty shifting gaze, and gaze fixation duration.</p>
-                            </div>
-                            <div style="background: rgba(0,0,0,0.03); border-radius: 8px; padding: 12px; border-left: 3px solid #ef4444;">
-                                <strong style="color: #f87171;">F — Sensory Response Behaviors</strong>
-                                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Covering ears, sudden agitation, turning away from stimuli, hand-to-head gestures, and motion bursts.</p>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="markers-detected">
-                        <h4>Behaviors Detected</h4>
+                        <h4>Autism-Related Markers Detected</h4>
                         <div class="markers-list" id="markers-list">
                             <!-- Markers will be inserted here -->
                         </div>
                     </div>
 
                     <div class="analysis-details">
-                        <h4>Feature Vector & Detailed Scores</h4>
+                        <h4>Detailed Analysis</h4>
                         <div class="details-list" id="analysis-details">
                             <!-- Analysis details will be inserted here -->
                         </div>
-                    </div>
-
-                    <!-- NEW: Risk Score Formula Explanation -->
-                    <div class="risk-formula-section" style="background: rgba(239, 68, 68, 0.06); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
-                        <h4 style="margin-bottom: 0.8rem; color: #f87171; display: flex; align-items: center; gap: 8px;">
-                            <span>📐</span> How the Risk Score is Calculated
-                        </h4>
-                        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.8rem;">The final Autism Behavior Risk Score is a weighted combination of the category scores:</p>
-                        <div style="background: rgba(0,0,0,0.05); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.85rem; color: var(--text-primary); line-height: 1.8;">
-                            Risk Score =<br>
-                            &nbsp;&nbsp;0.25 × <span style="color: #818cf8;">Eye Contact Score</span><br>
-                            + 0.30 × <span style="color: #f472b6;">Repetitive Behavior Score</span><br>
-                            + 0.20 × <span style="color: #a78bfa;">Social Interaction Score</span><br>
-                            + 0.15 × <span style="color: #34d399;">Attention Pattern Score</span><br>
-                            + 0.10 × <span style="color: #f87171;">Sensory Response Score</span>
-                        </div>
-                        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.8rem;">
-                            <strong>High Risk:</strong> Score ≥ 0.70 &nbsp;|&nbsp; <strong>Moderate Risk:</strong> Score 0.40–0.69 &nbsp;|&nbsp; <strong>Low Risk:</strong> Score &lt; 0.40
-                        </p>
                     </div>
 
                     <div class="result-actions">
@@ -542,20 +489,20 @@
 
     <!-- Chatbot Floating Action Button -->
     <div class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()">
-        🌈
+        🤖
     </div>
 
     <!-- Chatbot Widget -->
     <div class="chatbot-container hidden" id="chatbot-container">
         <div class="chatbot-header" onclick="toggleChat()">
             <div class="chatbot-title">
-                <span style="font-size: 1.25rem;">🌈</span> AI Assistant
+                <span style="font-size: 1.25rem;">🤖</span> AI Assistant
             </div>
             <button class="close-chat-btn" id="chatbot-close-btn">&times;</button>
         </div>
         <div class="chatbot-body" id="chatbot-body">
             <div class="chat-message bot-message">
-                Hello! I'm the Autism Prediction AI Assistant. I can help answer questions about autism screening, how
+                Hello! I'm the Spectrum Sonar AI Assistant. I can help answer questions about autism screening, how
                 our tool works, or explain the assessment results. How can I help you today?
             </div>
         </div>

@@ -4,15 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Started - Autism Prediction</title>
+    <title>Get Started - Spectrum Sonar</title>
     <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         .auth-page {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(ellipse at center, #f1f5f9 0%, #e2e8f0 100%);
+            background: radial-gradient(ellipse at center, #1e293b 0%, #0f172a 100%);
             position: relative;
             overflow: hidden;
         }
@@ -24,15 +26,15 @@
             left: -10%;
             width: 50vw;
             height: 50vw;
-            background: radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
 
         .auth-container {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 3rem;
             border-radius: 24px;
             width: 100%;
@@ -88,12 +90,12 @@
             background: var(--gradient-primary);
             color: white;
             border: none;
-            box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
         }
 
         .auth-btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 30px -5px rgba(13, 148, 136, 0.6);
+            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.6);
         }
 
         .auth-btn-secondary {
@@ -103,8 +105,8 @@
         }
 
         .auth-btn-secondary:hover {
-            background: rgba(0, 0, 0, 0.05);
-            border-color: var(--primary-dark);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary-light);
         }
 
         .auth-footer {
@@ -119,17 +121,20 @@
     <div class="auth-page">
         <div class="auth-container">
             <div class="auth-logo">🧠</div>
-            <h1 class="auth-title">Welcome to Autism Prediction</h1>
+            <h1 class="auth-title">Welcome to Spectrum Sonar</h1>
             <p class="auth-subtitle">Advanced autism screening powered by AI</p>
 
             <div class="auth-buttons">
-                <a href="/" class="auth-btn auth-btn-primary">
-                    <span>Get Started</span>
+                <a href="/signup" class="auth-btn auth-btn-primary">
+                    <span>Create an Account</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
+                </a>
+                <a href="/login" class="auth-btn auth-btn-secondary">
+                    Log In
                 </a>
             </div>
 
